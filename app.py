@@ -1,5 +1,8 @@
 import pytube
 from pytube import *
+from pytube.cli import on_progress
+
+from plyer import notification
 
 import tkinter as tk
 from tkinter import filedialog
@@ -11,5 +14,11 @@ root.withdraw()
 
 file_path = filedialog.askdirectory()
 
-myVideo = pytube.YouTube(url).streams.get_highest_resolution().download(file_path)
-print(myVideo.title)
+video = pytube.YouTube(url).streams.get_highest_resolution()
+video.download(file_path)
+
+notification.notify(
+  title = "Download concluído",
+  message = str(video.title) + " foi baixado",
+  timeout = pytube.YouTube(url, on_progress_callback=on_progress)
+)
